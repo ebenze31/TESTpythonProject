@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import json
 # print Hello world
 print("\nHello world\n")
@@ -37,3 +38,14 @@ print("brands",json.dumps(brands),"\n")
 
 with open("brands.json", "w") as f:
     json.dump(brands,f)
+
+
+dict1 = {
+    "ant" : "มด",
+    "bird" : "นก",
+}
+search = "ant"
+print(dict1[search]) #มด
+
+list1 = [ "มด", "นก"]
+print(list1[0])  #มด
