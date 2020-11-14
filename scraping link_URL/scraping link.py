@@ -71,7 +71,7 @@ with open("URL/" + active_page + ".json", "w") as f:
 
 # json loop
 count = 0
-while count < 9 : # last_page
+while count < 4 : # last_page
     url_next_page = 'https://www.one2car.com/'+ text_next_page
     home_next_page = requests.get(url_next_page)
     soup2 = BeautifulSoup(home_next_page.text, 'html.parser')
@@ -125,14 +125,14 @@ while count < 9 : # last_page
     count = count + 1
 
 merge_array = {}
-filenames = os.listdir('C:/Users/Benze/PycharmProjects/TESTpythonProject/scraping link_URL/URL')
+filenames = os.listdir('URL')
 #print(filenames)
 for file in filenames:
     #print(file)
     split = file.split("=")
     numbre = split[1].split(".")
     #print(numbre[0])
-    with open('C:/Users/Benze/PycharmProjects/TESTpythonProject/scraping link_URL/URL/' + file) as f:
+    with open('URL/' + file) as f:
          data = json.load(f)
          merge_array[numbre[0]] = data
     # print(data)

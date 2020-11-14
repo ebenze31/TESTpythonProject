@@ -3,7 +3,7 @@ import requests
 import json
 from bs4 import BeautifulSoup
 
-with open('C:/Users/Benze/PycharmProjects/TESTpythonProject/scraping link_URL/merge/merge.json') as f:
+with open('../scraping link_URL/merge/merge.json') as f:
     data = json.load(f)
     for file in data:
         #print(file)
@@ -15,7 +15,22 @@ with open('C:/Users/Benze/PycharmProjects/TESTpythonProject/scraping link_URL/me
             print("URL = ", data[file][key])
             url = data[file][key]
 
-            data_car_array = {}
+            data_car_array = {
+                "ราคา": "",
+                "ประเภท": "",
+                "รูป": "",
+                "\n\nดีลเลอร์มีความน่าเชื่อถือ ผ่านการตรวจสอบตามเกณฑ์ที่กำหนด\n": "",
+                "ยี่ห้อ": "",
+                "รุ่น": "",
+                "โฉมรถยนต์": "",
+                "รายละเอียดรุ่น": "",
+                "ปี": "",
+                "ขนาดเครื่องยนต์": "",
+                "ระบบเกียร์": "",
+                "จำนวนที่นั่ง": "",
+                "เลขไมล์ (กม.)": "",
+                "สี": ""
+            }
             url_detail = url
 
             id_car = url_detail.split("/")
@@ -40,16 +55,23 @@ with open('C:/Users/Benze/PycharmProjects/TESTpythonProject/scraping link_URL/me
             # ADD TO ARRAY
             data_car_array["ประเภท"] = split_type_car[-1]
 
+            img = soup2.find("div", {"class": "gallery__image"})
+            img_car = img.find('img')['data-src']
+            print("IMG >>> "+img_car)
+            # ADD TO ARRAY
+            data_car_array["รูป"] = img_car
+
             car = soup2.find_all("div",{"class":"list-item"})
             for item in car :
                 if item.find('span') == None :
                     continue
-                if len(item.find_all('span')) == 2 or 3  :
+                if len(item.find_all('span')) == 2 or 3:
                     #print(item.find_all('span')[0].text, " / ", item.find_all('span')[1].text)
                     if item.find_all('span')[0].text == "ประเภทรถ" :
                         continue
                     if item.find_all('span')[0].text == "เล่มทะเบียน" :
                         continue
+
                     key = item.find_all('span')[0].text
                     value = item.find_all('span')[1].text
 
