@@ -39,6 +39,10 @@ with open('../scraping link_URL/merge/merge.json') as f:
 
             web_data = requests.get(url_detail)
             soup2 = BeautifulSoup(web_data.text,'html.parser')
+            if soup2.find("div",{"class":"listing__price"}) == None :
+                print("ERROR")
+                print(web_data.text)
+
 
             price_car = soup2.find("div",{"class":"listing__price"}).text
             if price_car == None:
