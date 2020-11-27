@@ -60,31 +60,4 @@ for file in filenames:
 
 print("เสร็จเรียบร้อย")
 
-for id_car in split_array:
-    # print(id_car)
-    id_car = id_car
 
-    mycursor = mydb.cursor()
-
-    query = mycursor.execute("SELECT link FROM links WHERE car_id = 111")
-    myresult = mycursor.fetchall()
-
-    print("มี ", mycursor.rowcount, "บรรทัด")
-    if link_in_database == "":
-        sql_links = "INSERT INTO links (created_at, car_id, link, active)" \
-                    " VALUES (%s, %s, %s, %s)"
-        val = [
-            (time,
-             id_car,
-             link_array[id_car],
-             "Yes")
-        ]
-        mycursor.executemany(sql_links, val)
-        mydb.commit()
-
-    else:
-        if mycursor.rowcount >= 1:
-            sql = "UPDATE links SET updated_at = %s WHERE car_id = %s"
-            val = (time, "111")
-            mycursor.execute(sql, val)
-            mydb.commit()
