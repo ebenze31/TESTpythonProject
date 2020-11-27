@@ -6,6 +6,14 @@ import os
 import mysql.connector
 import datetime as dt
 
+mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="collect-all-cars"
+    )
+print("Connect")
+
 time = dt.datetime.now()
 #print(time)
 
@@ -75,6 +83,34 @@ print("link",json.dumps(link_array,ensure_ascii=False),"\n")
 with open("URL/" + active_page + ".json", "w") as f:
     json.dump(link_array, f, ensure_ascii=False)
 
+    for id_car in split_array:
+        print(id_car)
+
+        mycursor = mydb.cursor()
+
+        query = mycursor.execute("SELECT link FROM links WHERE car_id = "+id_car)
+        myresult = mycursor.fetchall()
+
+        print("มี ", mycursor.rowcount, "บรรทัด")
+        if mycursor.rowcount == 0:
+            sql_links = "INSERT INTO links (created_at, car_id, link, active)" \
+                        " VALUES (%s, %s, %s, %s)"
+            val = [
+                (time,
+                 id_car,
+                 link_array[id_car],
+                 "Yes")
+            ]
+            mycursor.executemany(sql_links, val)
+            mydb.commit()
+
+        elif mycursor.rowcount >= 1:
+            sql = "UPDATE links SET updated_at = %s WHERE car_id = %s"
+            val = (time, id_car)
+            mycursor.execute(sql, val)
+            mydb.commit()
+
+
 # json loop
 count = 0
 while count < 1 : # last_page
@@ -128,6 +164,33 @@ while count < 1 : # last_page
     with open("URL/"+active_page + ".json", "w") as f:
         json.dump(link_array, f, ensure_ascii=False)
 
+    for id_car in split_array:
+        print(id_car)
+
+        mycursor = mydb.cursor()
+
+        query = mycursor.execute("SELECT link FROM links WHERE car_id = " + id_car)
+        myresult = mycursor.fetchall()
+
+        print("มี ", mycursor.rowcount, "บรรทัด")
+        if mycursor.rowcount == 0:
+            sql_links = "INSERT INTO links (created_at, car_id, link, active)" \
+                        " VALUES (%s, %s, %s, %s)"
+            val = [
+                (time,
+                 id_car,
+                 link_array[id_car],
+                 "Yes")
+            ]
+            mycursor.executemany(sql_links, val)
+            mydb.commit()
+
+        elif mycursor.rowcount >= 1:
+            sql = "UPDATE links SET updated_at = %s WHERE car_id = %s"
+            val = (time, id_car)
+            mycursor.execute(sql, val)
+            mydb.commit()
+
     count = count + 1
 merge_array = {}
 filenames = os.listdir('URL')
@@ -142,36 +205,10 @@ for file in filenames:
         merge_array[numbre[0]] = data
         # print(data)
         # print(merge_array)
-
     # print(data)
 
-    mydb = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="",
-            database="collect-all-cars"
-        )
-    print("Connect")
-    for id_car in split_array:
-        print(id_car)
-
-        mycursor = mydb.cursor()
-
-        sql_links = "INSERT INTO links (created_at, car_id, link, active)" \
-              " VALUES (%s, %s, %s, %s)"
-        val = [
-            (time,
-             id_car,
-             link_array[id_car],
-             "Yes")
-        ]
-
-        mycursor.executemany(sql_links, val)
-
-        mydb.commit()
-
-print("เสร็จเรียบร้อย")
 with open("merge/merge.json", "w") as f:
     json.dump(merge_array, f, ensure_ascii=False)
 
+print("เสร็จเรียบร้อย")
 
