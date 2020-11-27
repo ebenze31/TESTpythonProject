@@ -105,7 +105,7 @@ for link in myresult:
             print("timedelta >> ",t)
             print("timedelta.day >> ",t.days)
 
-        if t == "None" or t.days > 2:
+        if t == "None":
 
             # ADD TO ARRAY
             data_car_array["ลิงก์"] = url_detail
@@ -197,16 +197,157 @@ for link in myresult:
 
                 mycursor = mydb.cursor()
 
-                query = mycursor.execute("SELECT link FROM details WHERE car_id = " + car_id)
-                myresult = mycursor.fetchall()
+                sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
+                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                val1 = [
+                    (time,
+                     data['ราคา'],
+                     data['ประเภท'],
+                     data['ยี่ห้อ'],
+                     data['รุ่น'],
+                     data['โฉมรถยนต์'],
+                     data['รายละเอียดรุ่น'],
+                     data['ปี'],
+                     data['ขนาดเครื่องยนต์'],
+                     data['ระบบเกียร์'],
+                     data['จำนวนที่นั่ง'],
+                     data['เลขไมล์ (กม.)'],
+                     data['สี'],
+                     data['รูป'],
+                     car_id,
+                     data['สถานที่'],
+                     data['ลิงก์'])
+                ]
+                mycursor.executemany(sql1, val1)
 
-                print("มี ", mycursor.rowcount, "บรรทัด")
-                if mycursor.rowcount == 0:
-                    sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
-                           " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                    val1 = [
-                        (time,
-                         data['ราคา'],
+                sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
+                val2 = (time, "Yes", car_id)
+                mycursor.execute(sql2, val2)
+
+                mydb.commit()
+
+        elif int(t.days) > 7:
+            print("--------- ค่ามากกว่า 2 แล้วนะ ----------")
+            mycursor = mydb.cursor()
+            sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
+            val2 = (time, "Yes", car_id)
+            mycursor.execute(sql2, val2)
+
+            sql = "UPDATE details SET updated_at = %s WHERE car_id = %s"
+            val = (time, car_id)
+            mycursor.execute(sql, val)
+
+            mydb.commit()
+
+            mycursor = mydb.cursor()
+            query = mycursor.execute("SELECT link FROM links ")
+            myresult = mycursor.fetchall()
+            for link in myresult:
+                print("link >>> ", link)
+                url = str(link)
+                u = url.split("'")
+                url_detail = u[1]
+                print("url_detail = ", url_detail)
+                split_url = url_detail.split("/")
+                # print("split_url -1 = ",split_url[-1])
+                c = split_url[-1].split("'")
+                car_id = c[0]
+                print("car_id  = ", car_id)
+                location = split_url[-2]
+                print("location = ", location)
+
+                # ADD TO ARRAY
+                data_car_array["ลิงก์"] = url_detail
+                # ADD TO ARRAY
+                data_car_array["สถานที่"] = location
+
+                web_data = requests.get(url_detail)
+                soup2 = BeautifulSoup(web_data.text, 'html.parser')
+
+                # หา 404 เปลี่ยน active เป็น No
+
+                error_404 = soup2.find("title").text
+                print("title >>", error_404)
+                if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
+                    mycursor = mydb.cursor()
+                    sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s AND active = %s"
+                    val = ("No", time, car_id, "Yes")
+                    mycursor.execute(sql, val)
+                    mydb.commit()
+                    break
+                elif error_404 == None:
+                    continue
+
+                if soup2.find("div", {"class": "listing__price"}) == None:
+                    print("ERROR")
+                    print(web_data.text)
+
+                price_car = soup2.find("div", {"class": "listing__price"}).text
+                if price_car == None:
+                    continue
+                print("price_car >> ", price_car)
+                # ADD TO ARRAY
+                data_car_array["ราคา"] = price_car
+
+                type_car = soup2.find("div", {"class": "listing__title"}).text
+                # print(type_car)
+                split_type_car = type_car.split(" ")
+                # print(split_type_car)
+                print(split_type_car[-1])
+                # ADD TO ARRAY
+                data_car_array["ประเภท"] = split_type_car[-1]
+
+                img = soup2.find("div", {"class": "gallery__image"})
+                img_car = img.find('img')['data-src']
+                print("IMG >>> " + img_car)
+                # ADD TO ARRAY
+                data_car_array["รูป"] = img_car
+
+                car = soup2.find_all("div", {"class": "list-item"})
+                for item in car:
+                    if item.find('span') == None:
+                        continue
+                    if len(item.find_all('span')) == 2 or 3:
+                        # print(item.find_all('span')[0].text, " / ", item.find_all('span')[1].text)
+                        if item.find_all('span')[0].text == "ประเภทรถ":
+                            continue
+                        if item.find_all('span')[0].text == "เล่มทะเบียน":
+                            continue
+
+                        key = item.find_all('span')[0].text
+                        value = item.find_all('span')[1].text
+
+                        if item.find_all('span')[0].text == "เกียร์":
+                            key = item.find_all('span')[0].text
+                            value = item.find_all('span')[1].text
+                            break
+                        # ADD TO ARRAY
+                        data_car_array[key] = value
+                        print(data_car_array)
+
+                # save to json
+                print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
+                with open("detail/" + car_id + ".json", "w") as f:
+                    json.dump(data_car_array, f, ensure_ascii=False)
+
+                filenames = os.listdir('../scraping detail/detail')
+                # print(filenames)
+                for file in filenames:
+                    # print(file)
+                    split = file.split(".")
+                    print(split[0])
+                    car_id = split[0]
+
+                    with open("../scraping detail/detail/" + split[0] + ".json") as f:
+                        data = json.load(f)
+                    print(data)
+                    print(data['ราคา'])
+
+                    mycursor = mydb.cursor()
+                    sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
+                           " submodel = %s, year = %s, motor = %s, gear = %s, seats = %s, distance = %s, color = %s," \
+                           " image = %s, car_id = %s, location = %s, link = %s WHERE car_id = %s"
+                    val =(data['ราคา'],
                          data['ประเภท'],
                          data['ยี่ห้อ'],
                          data['รุ่น'],
@@ -221,27 +362,10 @@ for link in myresult:
                          data['รูป'],
                          car_id,
                          data['สถานที่'],
-                         data['ลิงก์'])
-                    ]
-                    mycursor.executemany(sql1, val1)
-
-                    sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
-                    val2 = (time, "Yes", car_id)
-                    mycursor.execute(sql2, val2)
-
-                    mydb.commit()
-
-                elif mycursor.rowcount >= 1:
-                    sql = "UPDATE details SET updated_at = %s WHERE car_id = %s"
-                    val = (time, car_id)
+                         data['ลิงก์'],
+                         car_id)
                     mycursor.execute(sql, val)
-
-                    sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
-                    val2 = (time, "Yes", car_id)
-                    mycursor.execute(sql2, val2)
-
                     mydb.commit()
-
         else:
             print(">> ข้ า ม <<")
 
