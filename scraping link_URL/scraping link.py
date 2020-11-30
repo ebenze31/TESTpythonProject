@@ -85,12 +85,10 @@ with open("URL/" + active_page + ".json", "w") as f:
 
     for id_car in split_array:
         print(id_car)
-        sp = id_car.split("?")
-        car_id = sp[0]
 
         mycursor = mydb.cursor()
 
-        query = mycursor.execute("SELECT link FROM links WHERE car_id = "+car_id)
+        query = mycursor.execute("SELECT link FROM links WHERE car_id = "+id_car)
         myresult = mycursor.fetchall()
 
         print("มี ", mycursor.rowcount, "บรรทัด")
@@ -99,7 +97,7 @@ with open("URL/" + active_page + ".json", "w") as f:
                         " VALUES (%s, %s, %s, %s)"
             val = [
                 (time,
-                 car_id,
+                 id_car,
                  link_array[id_car],
                  "Yes")
             ]
@@ -108,7 +106,7 @@ with open("URL/" + active_page + ".json", "w") as f:
 
         elif mycursor.rowcount >= 1:
             sql = "UPDATE links SET updated_at = %s WHERE car_id = %s"
-            val = (time, car_id)
+            val = (time, id_car)
             mycursor.execute(sql, val)
             mydb.commit()
 
@@ -168,12 +166,10 @@ while count < 1 : # last_page
 
     for id_car in split_array:
         print(id_car)
-        sp = id_car.split("?")
-        car_id = sp[0]
 
         mycursor = mydb.cursor()
 
-        query = mycursor.execute("SELECT link FROM links WHERE car_id = " + car_id)
+        query = mycursor.execute("SELECT link FROM links WHERE car_id = " + id_car)
         myresult = mycursor.fetchall()
 
         print("มี ", mycursor.rowcount, "บรรทัด")
@@ -182,7 +178,7 @@ while count < 1 : # last_page
                         " VALUES (%s, %s, %s, %s)"
             val = [
                 (time,
-                 car_id,
+                 id_car,
                  link_array[id_car],
                  "Yes")
             ]
