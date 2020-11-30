@@ -30,7 +30,8 @@ for link in myresult:
     split_url = url_detail.split("/")
     # print("split_url -1 = ",split_url[-1])
     c = split_url[-1].split("'")
-    car_id = c[0]
+    cc = c[0].split("?")
+    car_id = cc[0]
     print("car_id  = ", car_id)
     location = split_url[-2]
     print("location = ",location)
@@ -188,46 +189,47 @@ for link in myresult:
                 # print(file)
                 split = file.split(".")
                 print(split[0])
-                car_id = split[0]
+                cc = split[0].split("?")
+                car_id = cc[0]
 
-                with open("../scraping detail/detail/" + split[0] + ".json") as f:
-                    data = json.load(f)
-                print(data)
-                print(data['ราคา'])
+            with open("../scraping detail/detail/" + car_id + ".json") as f:
+                data = json.load(f)
+            print(data)
+            print(data['ราคา'])
 
-                mycursor = mydb.cursor()
+            mycursor = mydb.cursor()
 
-                sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
-                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                val1 = [
-                    (time,
-                     data['ราคา'],
-                     data['ประเภท'],
-                     data['ยี่ห้อ'],
-                     data['รุ่น'],
-                     data['โฉมรถยนต์'],
-                     data['รายละเอียดรุ่น'],
-                     data['ปี'],
-                     data['ขนาดเครื่องยนต์'],
-                     data['ระบบเกียร์'],
-                     data['จำนวนที่นั่ง'],
-                     data['เลขไมล์ (กม.)'],
-                     data['สี'],
-                     data['รูป'],
-                     car_id,
-                     data['สถานที่'],
-                     data['ลิงก์'])
-                ]
-                mycursor.executemany(sql1, val1)
+            sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
+                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val1 = [
+                (time,
+                 data['ราคา'],
+                 data['ประเภท'],
+                 data['ยี่ห้อ'],
+                 data['รุ่น'],
+                 data['โฉมรถยนต์'],
+                 data['รายละเอียดรุ่น'],
+                 data['ปี'],
+                 data['ขนาดเครื่องยนต์'],
+                 data['ระบบเกียร์'],
+                 data['จำนวนที่นั่ง'],
+                 data['เลขไมล์ (กม.)'],
+                 data['สี'],
+                 data['รูป'],
+                 car_id,
+                 data['สถานที่'],
+                 data['ลิงก์'])
+            ]
+            mycursor.executemany(sql1, val1)
 
-                sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
-                val2 = (time, "Yes", car_id)
-                mycursor.execute(sql2, val2)
+            sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
+            val2 = (time, "Yes", car_id)
+            mycursor.execute(sql2, val2)
 
-                mydb.commit()
+            mydb.commit()
 
         elif int(t.days) > 7:
-            print("--------- ค่ามากกว่า 2 แล้วนะ ----------")
+            print("--------- ค่ามากกว่า 7 ----------")
             mycursor = mydb.cursor()
             sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
             val2 = (time, "Yes", car_id)
@@ -251,7 +253,8 @@ for link in myresult:
                 split_url = url_detail.split("/")
                 # print("split_url -1 = ",split_url[-1])
                 c = split_url[-1].split("'")
-                car_id = c[0]
+                cc = c[0].split("?")
+                car_id = cc[0]
                 print("car_id  = ", car_id)
                 location = split_url[-2]
                 print("location = ", location)
@@ -336,36 +339,38 @@ for link in myresult:
                     # print(file)
                     split = file.split(".")
                     print(split[0])
-                    car_id = split[0]
+                    cc = split[0].split("?")
+                    car_id = cc[0]
+                    print("car_id car_id car_id >>> ", car_id)
 
-                    with open("../scraping detail/detail/" + split[0] + ".json") as f:
-                        data = json.load(f)
-                    print(data)
-                    print(data['ราคา'])
+                with open("../scraping detail/detail/" + car_id + ".json") as f:
+                    data = json.load(f)
+                print(data)
+                print(data['ราคา'])
 
-                    mycursor = mydb.cursor()
-                    sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
-                           " submodel = %s, year = %s, motor = %s, gear = %s, seats = %s, distance = %s, color = %s," \
-                           " image = %s, car_id = %s, location = %s, link = %s WHERE car_id = %s"
-                    val =(data['ราคา'],
-                         data['ประเภท'],
-                         data['ยี่ห้อ'],
-                         data['รุ่น'],
-                         data['โฉมรถยนต์'],
-                         data['รายละเอียดรุ่น'],
-                         data['ปี'],
-                         data['ขนาดเครื่องยนต์'],
-                         data['ระบบเกียร์'],
-                         data['จำนวนที่นั่ง'],
-                         data['เลขไมล์ (กม.)'],
-                         data['สี'],
-                         data['รูป'],
-                         car_id,
-                         data['สถานที่'],
-                         data['ลิงก์'],
-                         car_id)
-                    mycursor.execute(sql, val)
-                    mydb.commit()
+                mycursor = mydb.cursor()
+                sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
+                       " submodel = %s, year = %s, motor = %s, gear = %s, seats = %s, distance = %s, color = %s," \
+                       " image = %s, car_id = %s, location = %s, link = %s WHERE car_id = %s"
+                val =(data['ราคา'],
+                     data['ประเภท'],
+                     data['ยี่ห้อ'],
+                     data['รุ่น'],
+                     data['โฉมรถยนต์'],
+                     data['รายละเอียดรุ่น'],
+                     data['ปี'],
+                     data['ขนาดเครื่องยนต์'],
+                     data['ระบบเกียร์'],
+                     data['จำนวนที่นั่ง'],
+                     data['เลขไมล์ (กม.)'],
+                     data['สี'],
+                     data['รูป'],
+                     car_id,
+                     data['สถานที่'],
+                     data['ลิงก์'],
+                     car_id)
+                mycursor.execute(sql, val)
+                mydb.commit()
         else:
             print(">> ข้ า ม <<")
 
