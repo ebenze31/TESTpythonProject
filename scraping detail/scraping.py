@@ -227,7 +227,7 @@ for link in myresult:
                 mydb.commit()
 
         elif int(t.days) > 7:
-            print("--------- ค่ามากกว่า 2 แล้วนะ ----------")
+            print("--------- ค่ามากกว่า 7 ----------")
             mycursor = mydb.cursor()
             sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
             val2 = (time, "Yes", car_id)
