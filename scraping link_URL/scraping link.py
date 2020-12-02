@@ -36,7 +36,9 @@ for item in links:
     split = item.find('a')['href'].split("/")
     #print(split[-1])
     split_array[split[-1]] = split[-1]
-    for id_car in split_array:
+    for c in split_array:
+        cc = c.split("?")
+        id_car = cc[0]
         print(id_car)
     link_array[id_car] = value
 
@@ -83,7 +85,9 @@ print("link",json.dumps(link_array,ensure_ascii=False),"\n")
 with open("URL/" + active_page + ".json", "w") as f:
     json.dump(link_array, f, ensure_ascii=False)
 
-    for id_car in split_array:
+    for c in split_array:
+        cc = c.split("?")
+        id_car = cc[0]
         print(id_car)
 
         mycursor = mydb.cursor()
@@ -164,7 +168,9 @@ while count < 1 : # last_page
     with open("URL/"+active_page + ".json", "w") as f:
         json.dump(link_array, f, ensure_ascii=False)
 
-    for id_car in split_array:
+    for c in split_array:
+        cc = c.split("?")
+        id_car = cc[0]
         print(id_car)
 
         mycursor = mydb.cursor()
