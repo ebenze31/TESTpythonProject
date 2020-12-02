@@ -65,7 +65,7 @@ for link in myresult:
         else:
             read_str =  str(read_at)
             sp = read_str.split(" ")
-            # print("sp[1]",sp[1])
+            print("เดือน = ",sp[1])
             if sp[1] == "1,":
                 month = "Jan"
             elif sp[1] == "2,":
@@ -88,7 +88,7 @@ for link in myresult:
                 month = "Oct"
             elif sp[1] == "11,":
                 month = "Nov"
-            elif sp[1] == "12":
+            elif sp[1] == "12,":
                 month = "Dec"
             #print("SP 0 >> ", sp[0])
             sp_year = sp[0].split("(")
@@ -106,7 +106,7 @@ for link in myresult:
             print("timedelta.day >> ",t.days)
 
         if t == "None":
-
+            print(">>>>>>>>>>>>> read_at == none <<<<<<<<<<<<<<<")
             # ADD TO ARRAY
             data_car_array["ลิงก์"] = url_detail
             # ADD TO ARRAY
@@ -144,13 +144,13 @@ for link in myresult:
             #print(type_car)
             split_type_car = type_car.split(" ")
             #print(split_type_car)
-            print(split_type_car[-1])
+            #print(split_type_car[-1])
             # ADD TO ARRAY
             data_car_array["ประเภท"] = split_type_car[-1]
 
             img = soup2.find("div", {"class": "gallery__image"})
             img_car = img.find('img')['data-src']
-            print("IMG >>> "+img_car)
+            #print("IMG >>> "+img_car)
             # ADD TO ARRAY
             data_car_array["รูป"] = img_car
 
@@ -175,56 +175,56 @@ for link in myresult:
                         break
                     # ADD TO ARRAY
                     data_car_array[key] = value
-                    print(data_car_array)
+                    #print(data_car_array)
 
             # save to json
             print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
             with open("detail/" + car_id + ".json", "w") as f:
                 json.dump(data_car_array, f, ensure_ascii=False)
 
-            filenames = os.listdir('../scraping detail/detail')
-            # print(filenames)
-            for file in filenames:
-                # print(file)
-                split = file.split(".")
-                print(split[0])
-                car_id = split[0]
+            # filenames = os.listdir('../scraping detail/detail')
+            # # print(filenames)
+            # for file in filenames:
+            #     # print(file)
+            #     split = file.split(".")
+            #     print(split[0])
+            #     car_id = split[0]
 
-                with open("../scraping detail/detail/" + split[0] + ".json") as f:
-                    data = json.load(f)
-                print(data)
-                print(data['ราคา'])
+            with open("../scraping detail/detail/" + car_id + ".json") as f:
+                data = json.load(f)
+            print(data)
+            print(data['ราคา'])
 
-                mycursor = mydb.cursor()
+            mycursor = mydb.cursor()
 
-                sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
-                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                val1 = [
-                    (time,
-                     data['ราคา'],
-                     data['ประเภท'],
-                     data['ยี่ห้อ'],
-                     data['รุ่น'],
-                     data['โฉมรถยนต์'],
-                     data['รายละเอียดรุ่น'],
-                     data['ปี'],
-                     data['ขนาดเครื่องยนต์'],
-                     data['ระบบเกียร์'],
-                     data['จำนวนที่นั่ง'],
-                     data['เลขไมล์ (กม.)'],
-                     data['สี'],
-                     data['รูป'],
-                     car_id,
-                     data['สถานที่'],
-                     data['ลิงก์'])
-                ]
-                mycursor.executemany(sql1, val1)
+            sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
+                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            val1 = [
+                (time,
+                 data['ราคา'],
+                 data['ประเภท'],
+                 data['ยี่ห้อ'],
+                 data['รุ่น'],
+                 data['โฉมรถยนต์'],
+                 data['รายละเอียดรุ่น'],
+                 data['ปี'],
+                 data['ขนาดเครื่องยนต์'],
+                 data['ระบบเกียร์'],
+                 data['จำนวนที่นั่ง'],
+                 data['เลขไมล์ (กม.)'],
+                 data['สี'],
+                 data['รูป'],
+                 car_id,
+                 data['สถานที่'],
+                 data['ลิงก์'])
+            ]
+            mycursor.executemany(sql1, val1)
 
-                sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
-                val2 = (time, "Yes", car_id)
-                mycursor.execute(sql2, val2)
+            sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
+            val2 = (time, "Yes", car_id)
+            mycursor.execute(sql2, val2)
 
-                mydb.commit()
+            mydb.commit()
 
         elif int(t.days) > 7:
             print("--------- ค่ามากกว่า 7 ----------")
@@ -330,42 +330,42 @@ for link in myresult:
                 with open("detail/" + car_id + ".json", "w") as f:
                     json.dump(data_car_array, f, ensure_ascii=False)
 
-                filenames = os.listdir('../scraping detail/detail')
-                # print(filenames)
-                for file in filenames:
-                    # print(file)
-                    split = file.split(".")
-                    print(split[0])
-                    car_id = split[0]
+                # filenames = os.listdir('../scraping detail/detail')
+                # # print(filenames)
+                # for file in filenames:
+                #     # print(file)
+                #     split = file.split(".")
+                #     print(split[0])
+                #     car_id = split[0]
 
-                    with open("../scraping detail/detail/" + split[0] + ".json") as f:
-                        data = json.load(f)
-                    print(data)
-                    print(data['ราคา'])
+                with open("../scraping detail/detail/" + car_id + ".json") as f:
+                    data = json.load(f)
+                print(data)
+                print(data['ราคา'])
 
-                    mycursor = mydb.cursor()
-                    sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
-                           " submodel = %s, year = %s, motor = %s, gear = %s, seats = %s, distance = %s, color = %s," \
-                           " image = %s, car_id = %s, location = %s, link = %s WHERE car_id = %s"
-                    val =(data['ราคา'],
-                         data['ประเภท'],
-                         data['ยี่ห้อ'],
-                         data['รุ่น'],
-                         data['โฉมรถยนต์'],
-                         data['รายละเอียดรุ่น'],
-                         data['ปี'],
-                         data['ขนาดเครื่องยนต์'],
-                         data['ระบบเกียร์'],
-                         data['จำนวนที่นั่ง'],
-                         data['เลขไมล์ (กม.)'],
-                         data['สี'],
-                         data['รูป'],
-                         car_id,
-                         data['สถานที่'],
-                         data['ลิงก์'],
-                         car_id)
-                    mycursor.execute(sql, val)
-                    mydb.commit()
+                mycursor = mydb.cursor()
+                sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
+                       " submodel = %s, year = %s, motor = %s, gear = %s, seats = %s, distance = %s, color = %s," \
+                       " image = %s, car_id = %s, location = %s, link = %s WHERE car_id = %s"
+                val =(data['ราคา'],
+                     data['ประเภท'],
+                     data['ยี่ห้อ'],
+                     data['รุ่น'],
+                     data['โฉมรถยนต์'],
+                     data['รายละเอียดรุ่น'],
+                     data['ปี'],
+                     data['ขนาดเครื่องยนต์'],
+                     data['ระบบเกียร์'],
+                     data['จำนวนที่นั่ง'],
+                     data['เลขไมล์ (กม.)'],
+                     data['สี'],
+                     data['รูป'],
+                     car_id,
+                     data['สถานที่'],
+                     data['ลิงก์'],
+                     car_id)
+                mycursor.execute(sql, val)
+                mydb.commit()
         else:
             print(">> ข้ า ม <<")
 
