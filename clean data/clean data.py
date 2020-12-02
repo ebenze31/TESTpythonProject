@@ -18,12 +18,12 @@ mydb = mysql.connector.connect(
 )
 print("Connect")
 
-mycursor = mydb.cursor()
-query = mycursor.execute("SELECT created_at, updated_at, price, type, brand, model, submodel, year, motor, "
+mycursor_1 = mydb.cursor()
+query_1 = mycursor_1.execute("SELECT created_at, updated_at, price, type, brand, model, submodel, year, motor, "
                          "gear, seats, distance, color, image, location, link, car_id FROM details ")
-myresult = mycursor.fetchall()
+myresult_1 = mycursor_1.fetchall()
 
-for data in myresult:
+for data in myresult_1:
     print("---------------------------------------------------")
     # รหัสรถ
     car_id_detail = data[-1]
@@ -33,7 +33,8 @@ for data in myresult:
     price_old = data[2]
     p = price_old.split("%")
     pp = p[-1].replace("บาท","")
-    price = pp.replace("\n","")
+    ppp = pp.replace("\n","")
+    price = ppp.replace(",","")
     # print("ราคาเดิม >>> ",p)
     print("ราคา >>> ", price)
 
@@ -131,4 +132,30 @@ for data in myresult:
     # ลิงก์
     link = data[15]
     print("ลิงก์ >>> ", link)
+
+    mycursor = mydb.cursor()
+
+    sql1 = "INSERT INTO data_cars (created_at, price, type, brand, model, submodel, year, motor,gear, seats, distance," \
+           " color, image, location, link, car_id_detail)" \
+           " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+    val1 = [
+        (time,
+         price,
+         type,
+         brand,
+         model,
+         submodel,
+         year,
+         motor,
+         gear,
+         seats,
+         distance,
+         color,
+         image,
+         location,
+         link,
+         car_id_detail)
+    ]
+    mycursor.executemany(sql1, val1)
+    mydb.commit()
 
