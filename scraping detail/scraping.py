@@ -30,7 +30,8 @@ for link in myresult:
     split_url = url_detail.split("/")
     # print("split_url -1 = ",split_url[-1])
     c = split_url[-1].split("'")
-    car_id = c[0]
+    cc = c[0].split("?")
+    car_id = cc[0]
     print("car_id  = ", car_id)
     location = split_url[-2]
     print("location = ",location)
@@ -147,13 +148,14 @@ for link in myresult:
             #print(split_type_car[-1])
             # ADD TO ARRAY
             data_car_array["ประเภท"] = split_type_car[-1]
-
-            img = soup2.find("div", {"class": "gallery__image"})
-            img_car = img.find('img')['data-src']
-            #print("IMG >>> "+img_car)
-            # ADD TO ARRAY
-            data_car_array["รูป"] = img_car
-
+            try:
+                img = soup2.find("div", {"class": "gallery__image"})
+                img_car = img.find('img')['data-src']
+                #print("IMG >>> "+img_car)
+                # ADD TO ARRAY
+                data_car_array["รูป"] = img_car
+            except:
+                data_car_array["รูป"] = ""
 
             car = soup2.find_all("div",{"class":"list-item"})
             for item in car :
@@ -297,11 +299,14 @@ for link in myresult:
                 # ADD TO ARRAY
                 data_car_array["ประเภท"] = split_type_car[-1]
 
-                img = soup2.find("div", {"class": "gallery__image"})
-                img_car = img.find('img')['data-src']
-                print("IMG >>> " + img_car)
-                # ADD TO ARRAY
-                data_car_array["รูป"] = img_car
+                try:
+                    img = soup2.find("div", {"class": "gallery__image"})
+                    img_car = img.find('img')['data-src']
+                    #print("IMG >>> " + img_car)
+                    # ADD TO ARRAY
+                    data_car_array["รูป"] = img_car
+                except:
+                    data_car_array["รูป"] = ""
 
                 car = soup2.find_all("div", {"class": "list-item"})
                 for item in car:

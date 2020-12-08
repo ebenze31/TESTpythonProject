@@ -51,8 +51,8 @@ for item in active_page:
     text_active_page = item.find('a')['href']
     split = item.find('a')['href'].split("&")
     print("text_active_page =  ",text_active_page)
-    active_page = split[1]
-    print("active_page =  ", active_page)
+    active_page_n = split[1]
+    print("active_page =  ", active_page_n)
 
 # next_page
 next_page_array = {}
@@ -82,7 +82,7 @@ for item in last_page:
 
 # save to json
 print("link",json.dumps(link_array,ensure_ascii=False),"\n")
-with open("URL/" + active_page + ".json", "w") as f:
+with open("URL/" + active_page_n + ".json", "w") as f:
     json.dump(link_array, f, ensure_ascii=False)
 
     for c in split_array:
@@ -134,7 +134,9 @@ while count < 1 : # last_page
         split = item.find('a')['href'].split("/")
         # print(split[-1])
         split_array[split[-1]] = split[-1]
-        for id_car in split_array:
+        for c in split_array:
+            cc = c.split("?")
+            id_car = cc[0]
             print(id_car)
         link_array[id_car] = value
 
@@ -147,8 +149,8 @@ while count < 1 : # last_page
         text_active_page = item.find('a')['href']
         split = item.find('a')['href'].split("&")
         print("text_active_page =  ", text_active_page)
-        active_page = split[1]
-        print("active_page =  ", active_page)
+        active_page_now = split[1]
+        print("active_page =  ", active_page_now)
 
     # next_page
     next_page_array = {}
@@ -165,13 +167,13 @@ while count < 1 : # last_page
 
     # save to json
     print("link", json.dumps(link_array, ensure_ascii=False), "\n")
-    with open("URL/"+active_page + ".json", "w") as f:
+    with open("URL/"+ active_page_now + ".json", "w") as f:
         json.dump(link_array, f, ensure_ascii=False)
 
     for c in split_array:
         cc = c.split("?")
         id_car = cc[0]
-        print(id_car)
+        print(type(id_car))
 
         mycursor = mydb.cursor()
 
