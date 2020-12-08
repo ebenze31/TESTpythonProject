@@ -7,10 +7,10 @@ import mysql.connector
 import datetime as dt
 
 mydb = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="collect-all-cars"
+        host="127.0.0.1",
+        user="viicheck",
+        password="viicheck",
+        database="viicheck"
     )
 print("Connect")
 
