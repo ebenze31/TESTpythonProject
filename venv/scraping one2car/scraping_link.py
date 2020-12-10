@@ -77,7 +77,9 @@ def funcUrl_allpage():
         split = item.find('a')['href'].split("&")
         print("text_last_page =  ",text_last_page)
         last_page = split[1]
-        print("last_page =  ", last_page)
+        last_page_sp = last_page.split("=")
+        last_page_num = last_page_sp[1]
+        print("last_page =  ", last_page_num)
 
     # save to json
     print("link",json.dumps(link_array,ensure_ascii=False),"\n")
@@ -115,7 +117,7 @@ def funcUrl_allpage():
 
     # json loop
     count = 0
-    while count < last_page : # last_page
+    while count < int(last_page_num) : # last_page
         url_next_page = 'https://www.one2car.com/'+ text_next_page
         home_next_page = requests.get(url_next_page)
         soup2 = BeautifulSoup(home_next_page.text, 'html.parser')
@@ -171,7 +173,7 @@ def funcUrl_allpage():
         for c in split_array:
             cc = c.split("?")
             id_car = cc[0]
-            print(type(id_car))
+            #print(type(id_car))
 
             mycursor = mydb.cursor()
 
