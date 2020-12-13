@@ -7,10 +7,10 @@ import mysql.connector
 import datetime as dt
 def funcUrl_allpage():
     mydb = mysql.connector.connect(
-            host="127.0.0.1",
-            user="viicheck",
-            password="viicheck",
-            database="viicheck"
+        host="127.0.0.1",
+        user="viicheck",
+        password="viicheck",
+        database="viicheck"
         )
     print("Connect")
     time = dt.datetime.now()
@@ -117,7 +117,7 @@ def funcUrl_allpage():
 
     # json loop
     count = 0
-    while count < int(last_page_num) : # last_page
+    while count < int(last_page_num) : # int(last_page_num)
         url_next_page = 'https://www.one2car.com/'+ text_next_page
         home_next_page = requests.get(url_next_page)
         soup2 = BeautifulSoup(home_next_page.text, 'html.parser')
