@@ -7,7 +7,7 @@ import mysql.connector
 import datetime as dt
 def funcUrl_allpage():
     mydb = mysql.connector.connect(
-        host="127.0.0.1",
+        host="206.189.90.92",
         user="viicheck",
         password="viicheck",
         database="viicheck"
