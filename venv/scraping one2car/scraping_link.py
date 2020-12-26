@@ -5,13 +5,16 @@ from bs4 import BeautifulSoup
 import os
 import mysql.connector
 import datetime as dt
+import connect
 def funcUrl_allpage():
+    # connection เป็น {}
+    connection = connect.confunc()
     mydb = mysql.connector.connect(
-        host="206.189.90.92",
-        user="viicheck",
-        password="viicheck",
-        database="viicheck"
-        )
+        host="localhost",
+        user=connection['user'],
+        password=connection['password'],
+        database=connection['database']
+    )
     print("Connect")
     time = dt.datetime.now()
     print(time)

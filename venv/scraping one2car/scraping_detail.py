@@ -6,16 +6,19 @@ import mysql.connector
 import datetime
 from datetime import datetime
 import os
+import connect
 
 def funcDetail():
     time = datetime.now()
     print("TIME >>",time)
 
+    # connection เป็น {}
+    connection = connect.confunc()
     mydb = mysql.connector.connect(
-        host="206.189.90.92",
-        user="viicheck",
-        password="viicheck",
-        database="viicheck"
+        host="localhost",
+        user=connection['user'],
+        password=connection['password'],
+        database=connection['database']
     )
     print("Connect")
 
