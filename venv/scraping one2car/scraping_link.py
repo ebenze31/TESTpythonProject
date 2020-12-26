@@ -6,8 +6,8 @@ import os
 import mysql.connector
 import datetime as dt
 import connect
+
 def funcUrl_allpage():
-    # connection เป็น {}
     connection = connect.confunc()
     mydb = mysql.connector.connect(
         host="localhost",

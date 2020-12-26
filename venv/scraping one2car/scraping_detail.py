@@ -12,7 +12,6 @@ def funcDetail():
     time = datetime.now()
     print("TIME >>",time)
 
-    # connection เป็น {}
     connection = connect.confunc()
     mydb = mysql.connector.connect(
         host="localhost",
