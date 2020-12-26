@@ -15,7 +15,7 @@ def funcUrl_allpage():
         password=connection['password'],
         database=connection['database']
     )
-    print("Connect")
+    print("Connect..")
     time = dt.datetime.now()
     print(time)
 
