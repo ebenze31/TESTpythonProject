@@ -12,12 +12,11 @@ def funcDetail():
     time = datetime.now()
     print("TIME >>",time)
 
-    connection = connect.confunc()
     mydb = mysql.connector.connect(
-        host="localhost",
-        user=connection['user'],
-        password=connection['password'],
-        database=connection['database']
+        host="159.65.128.190",
+        user="viicheck",
+        password="viicheck",
+        database="viicheck"
     )
     print("Connect")
 

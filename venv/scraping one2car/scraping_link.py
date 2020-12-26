@@ -8,15 +8,16 @@ import datetime as dt
 import connect
 
 def funcUrl_allpage():
-    connection = connect.confunc()
     mydb = mysql.connector.connect(
-        host="localhost",
-        user=connection['user'],
-        password=connection['password'],
-        database=connection['database']
+        host="159.65.128.190",
+        user="viicheck",
+        password="viicheck",
+        database="viicheck"
     )
-    print("Connect..")
-    time = dt.datetime.now()
+    print("Connect")
+
+
+time = dt.datetime.now()
     print(time)
 
     url_home = 'https://www.one2car.com/%E0%B8%A3%E0%B8%96%E0%B8%A1%E0%B8%B7%E0%B8%AD%E0%B8%AA%E0%B8%AD%E0%B8%87-%E0%B8%AA%E0%B8%B3%E0%B8%AB%E0%B8%A3%E0%B8%B1%E0%B8%9A-%E0%B8%82%E0%B8%B2%E0%B8%A2'
