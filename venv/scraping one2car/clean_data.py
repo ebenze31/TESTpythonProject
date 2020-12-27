@@ -6,7 +6,6 @@ import datetime
 from datetime import datetime
 import string
 import os
-import connect
 
 def funcClean():
     time = datetime.now()
@@ -22,7 +21,7 @@ def funcClean():
 
     mycursor_1 = mydb.cursor()
     query_1 = mycursor_1.execute("SELECT created_at, updated_at, price, type, brand, model, submodel, year, motor, "
-                             "gear, seats, distance, color, image, location, link, clean_at, car_id FROM details ")
+                                 "gear, seats, distance, color, image, location, link, clean_at, car_id FROM details ")
     myresult_1 = mycursor_1.fetchall()
 
     for data in myresult_1:

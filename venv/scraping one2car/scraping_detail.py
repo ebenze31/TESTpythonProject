@@ -6,7 +6,6 @@ import mysql.connector
 import datetime
 from datetime import datetime
 import os
-import connect
 
 def funcDetail():
     time = datetime.now()
