@@ -8,10 +8,10 @@ import datetime as dt
 
 def funcUrl_allpage():
     mydb = mysql.connector.connect(
-        host="159.65.128.190",
-        user="viicheck",
-        password="viicheck",
-        database="viicheck"
+        host="127.0.0.1",
+        user="root",
+        password="",
+        database="car"
     )
     print("Connect")
 

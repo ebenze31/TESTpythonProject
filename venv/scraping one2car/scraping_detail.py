@@ -12,10 +12,10 @@ def funcDetail():
     print("TIME >>",time)
 
     mydb = mysql.connector.connect(
-        host="159.65.128.190",
-        user="viicheck",
-        password="viicheck",
-        database="viicheck"
+        host="127.0.0.1",
+        user="root",
+        password="",
+        database="car"
     )
     print("Connect")
 
@@ -53,7 +53,8 @@ def funcDetail():
             "เลขไมล์ (กม.)": "",
             "สี": "",
             "สถานที่": "",
-            "ลิงก์": ""
+            "ลิงก์": "",
+            "ประเภทเชื้อเพลิง": ""
         }
 
         # เช็ค read_at in links database
@@ -172,7 +173,7 @@ def funcDetail():
                         key = item.find_all('span')[0].text
                         value = item.find_all('span')[1].text
 
-                        if item.find_all('span')[0].text == "เกียร์" :
+                        if item.find_all('span')[0].text == "รัศมีการเลี้ยว" :
                             key = item.find_all('span')[0].text
                             value = item.find_all('span')[1].text
                             break
@@ -200,8 +201,8 @@ def funcDetail():
 
                 mycursor = mydb.cursor()
 
-                sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link)" \
-                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel)" \
+                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 val1 = [
                     (time,
                      data['ราคา'],
@@ -219,7 +220,8 @@ def funcDetail():
                      data['รูป'],
                      car_id,
                      data['สถานที่'],
-                     data['ลิงก์'])
+                     data['ลิงก์'],
+                     data['ประเภทเชื้อเพลิง'])
                 ]
                 mycursor.executemany(sql1, val1)
 
@@ -323,7 +325,7 @@ def funcDetail():
                             key = item.find_all('span')[0].text
                             value = item.find_all('span')[1].text
 
-                            if item.find_all('span')[0].text == "เกียร์":
+                            if item.find_all('span')[0].text == "รัศมีการเลี้ยว":
                                 key = item.find_all('span')[0].text
                                 value = item.find_all('span')[1].text
                                 break
@@ -352,7 +354,7 @@ def funcDetail():
                     mycursor = mydb.cursor()
                     sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
                            " submodel = %s, year = %s, motor = %s, gear = %s, seats = %s, distance = %s, color = %s," \
-                           " image = %s, car_id = %s, location = %s, link = %s WHERE car_id = %s"
+                           " image = %s, car_id = %s, location = %s, link = %s, fuel = %s WHERE car_id = %s"
                     val =(data['ราคา'],
                          data['ประเภท'],
                          data['ยี่ห้อ'],
@@ -369,6 +371,7 @@ def funcDetail():
                          car_id,
                          data['สถานที่'],
                          data['ลิงก์'],
+                         data['ประเภทเชื้อเพลิง'],
                          car_id)
                     mycursor.execute(sql, val)
                     mydb.commit()

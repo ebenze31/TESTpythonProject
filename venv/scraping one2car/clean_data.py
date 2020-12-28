@@ -12,16 +12,16 @@ def funcClean():
     print("TIME >>",time)
 
     mydb = mysql.connector.connect(
-        host="159.65.128.190",
-        user="viicheck",
-        password="viicheck",
-        database="viicheck"
+        host="127.0.0.1",
+        user="root",
+        password="",
+        database="car"
     )
     print("Connect")
 
     mycursor_1 = mydb.cursor()
     query_1 = mycursor_1.execute("SELECT created_at, updated_at, price, type, brand, model, submodel, year, motor, "
-                                 "gear, seats, distance, color, image, location, link, clean_at, car_id FROM details ")
+                                 "gear, seats, distance, color, image, location, link, clean_at, fuel, car_id FROM details ")
     myresult_1 = mycursor_1.fetchall()
 
     for data in myresult_1:
@@ -140,11 +140,15 @@ def funcClean():
             link = data[15]
             print("ลิงก์ >>> ", link)
 
+            # ประเภทเชื้อเพลิง
+            fuel = data[17]
+            print("ประเภทเชื้อเพลิง >>> ", fuel)
+
             mycursor = mydb.cursor()
 
             sql1 = "INSERT INTO data_cars (created_at, price, type, brand, model, submodel, year, motor,gear, seats, distance," \
-                   " color, image, location, link, car_id_detail)" \
-                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                   " color, image, location, link, car_id_detail, fuel)" \
+                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             val1 = [
                 (time,
                  price,
@@ -161,7 +165,8 @@ def funcClean():
                  image,
                  location,
                  link,
-                 car_id_detail)
+                 car_id_detail,
+                 fuel)
             ]
             mycursor.executemany(sql1, val1)
 
@@ -285,13 +290,17 @@ def funcClean():
                 link = data[15]
                 print("ลิงก์ >>> ", link)
 
+                # ประเภทเชื้อเพลิง
+                fuel = data[17]
+                print("ประเภทเชื้อเพลิง >>> ", fuel)
+
                 mycursor = mydb.cursor()
 
                 sql = "UPDATE data_cars SET updated_at = %s, price= %s, type= %s, brand= %s, model= %s, submodel= %s," \
                         " year= %s, motor= %s,gear= %s, seats= %s, distance= %s, color= %s, image= %s, location= %s," \
-                        " link= %s, car_id_detail= %s WHERE car_id_detail = %s"
+                        " link= %s, car_id_detail= %s, fuel= %s WHERE car_id_detail = %s"
                 val = (time, price, type, brand, model, submodel, year, motor, gear, seats, distance, color, image,
-                         location, link, car_id_detail, car_id_detail)
+                         location, link, car_id_detail,fuel, car_id_detail)
 
                 mycursor.execute(sql, val)
 
