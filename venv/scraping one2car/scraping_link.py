@@ -41,7 +41,7 @@ def funcUrl_allpage():
         for c in split_array:
             cc = c.split("?")
             id_car = cc[0]
-            print(id_car)
+            # print(id_car)
         link_array[id_car] = value
 
     # active_page
@@ -52,7 +52,7 @@ def funcUrl_allpage():
             continue
         text_active_page = item.find('a')['href']
         split = item.find('a')['href'].split("&")
-        print("text_active_page =  ",text_active_page)
+        # print("text_active_page =  ",text_active_page)
         active_page_n = split[1]
         print("active_page =  ", active_page_n)
 
@@ -65,7 +65,7 @@ def funcUrl_allpage():
             continue
         text_next_page = item.find('a')['href']
         split = item.find('a')['href'].split("&")
-        print("text_next_page =  ",text_next_page)
+        # print("text_next_page =  ",text_next_page)
         page_number = split[1]
         print("next_page =  ", page_number)
 
@@ -78,21 +78,21 @@ def funcUrl_allpage():
             continue
         text_last_page = item.find('a')['href']
         split = item.find('a')['href'].split("&")
-        print("text_last_page =  ",text_last_page)
+        # print("text_last_page =  ",text_last_page)
         last_page = split[1]
         last_page_sp = last_page.split("=")
         last_page_num = last_page_sp[1]
         print("last_page =  ", last_page_num)
 
     # save to json
-    print("link",json.dumps(link_array,ensure_ascii=False),"\n")
+    # print("link",json.dumps(link_array,ensure_ascii=False),"\n")
     with open("scraping_link_URL/URL/" + active_page_n + ".json", "w") as f:
         json.dump(link_array, f, ensure_ascii=False)
 
         for c in split_array:
             cc = c.split("?")
             id_car = cc[0]
-            print(id_car)
+            # print(id_car)
 
             mycursor = mydb.cursor()
 
@@ -120,7 +120,7 @@ def funcUrl_allpage():
 
     # json loop
     count = 0
-    while count < 2 : # int(last_page_num)
+    while count < int(last_page_num) : # int(last_page_num)
         url_next_page = 'https://www.one2car.com/'+ text_next_page
         home_next_page = requests.get(url_next_page)
         soup2 = BeautifulSoup(home_next_page.text, 'html.parser')
@@ -140,7 +140,7 @@ def funcUrl_allpage():
             for c in split_array:
                 cc = c.split("?")
                 id_car = cc[0]
-                print(id_car)
+                # print(id_car)
             link_array[id_car] = value
 
         # active_page
@@ -151,7 +151,7 @@ def funcUrl_allpage():
                 continue
             text_active_page = item.find('a')['href']
             split = item.find('a')['href'].split("&")
-            print("text_active_page =  ", text_active_page)
+            # print("text_active_page =  ", text_active_page)
             active_page_now = split[1]
             print("active_page =  ", active_page_now)
 
@@ -164,12 +164,12 @@ def funcUrl_allpage():
                 continue
             text_next_page = item.find('a')['href']
             split = item.find('a')['href'].split("&")
-            print("text_next_page =  ", text_next_page)
+            # print("text_next_page =  ", text_next_page)
             page_number = split[1]
             print("next_page =  ", page_number)
 
         # save to json
-        print("link", json.dumps(link_array, ensure_ascii=False), "\n")
+        # print("link", json.dumps(link_array, ensure_ascii=False), "\n")
         with open("scraping_link_URL/URL/"+ active_page_now + ".json", "w") as f:
             json.dump(link_array, f, ensure_ascii=False)
 

@@ -146,8 +146,8 @@ def funcClean():
 
             mycursor = mydb.cursor()
 
-            sql1 = "INSERT INTO data_cars (created_at, price, type, brand, model, submodel, year, motor,gear, seats, distance," \
-                   " color, image, location, link, car_id_detail, fuel)" \
+            sql1 = "INSERT INTO data_cars (created_at, price, type, brand, model, submodel, year, motor, gear, " \
+                   "seats, distance, color, image, location, link, car_id_detail, fuel)" \
                    " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             val1 = [
                 (time,
@@ -169,7 +169,6 @@ def funcClean():
                  fuel)
             ]
             mycursor.executemany(sql1, val1)
-
             sql2 = "UPDATE details SET clean_at = %s WHERE car_id = %s"
             val2 = (time,  car_id_detail)
             mycursor.execute(sql2, val2)

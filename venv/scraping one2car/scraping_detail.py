@@ -23,7 +23,7 @@ def funcDetail():
     query = mycursor.execute("SELECT link FROM links ")
     myresult = mycursor.fetchall()
     for link in myresult:
-        print("link >>> ",link)
+        # print("link >>> ",link)
         url = str(link)
         u = url.split("'")
         url_detail = u[1]
@@ -33,9 +33,9 @@ def funcDetail():
         c = split_url[-1].split("'")
         cc = c[0].split("?")
         car_id = cc[0]
-        print("car_id  = ", car_id)
+        # print("car_id  = ", car_id)
         location = split_url[-2]
-        print("location = ",location)
+        # print("location = ",location)
 
         data_car_array = {
             "ราคา": "",
@@ -68,7 +68,7 @@ def funcDetail():
             else:
                 read_str =  str(read_at)
                 sp = read_str.split(" ")
-                print("เดือน = ",sp[1])
+                # print("เดือน = ",sp[1])
                 if sp[1] == "1,":
                     month = "Jan"
                 elif sp[1] == "2,":
@@ -103,10 +103,10 @@ def funcDetail():
                 print("วันที่ที่อ่านล่าสุด >> ", last_read)
                 format = "%d %b %Y at %H:%M:%S"
                 parsed_datetime = datetime.strptime(last_read, format)
-                print("parsed_datetime >> ", parsed_datetime)
+                # print("parsed_datetime >> ", parsed_datetime)
                 t = time - parsed_datetime
-                print("timedelta >> ",t)
-                print("timedelta.day >> ",t.days)
+                # print("timedelta >> ",t)
+                # print("timedelta.day >> ",t.days)
 
             if t == "None":
                 print(">>>>>>>>>>>>> read_at == none <<<<<<<<<<<<<<<")
@@ -134,12 +134,12 @@ def funcDetail():
 
                 if soup2.find("div",{"class":"listing__price"}) == None :
                     print("ERROR")
-                    print(web_data.text)
+                    # print(web_data.text)
 
                 price_car = soup2.find("div",{"class":"listing__price"}).text
                 if price_car == None:
                     continue
-                print("price_car >> ",price_car)
+                # print("price_car >> ",price_car)
                 # ADD TO ARRAY
                 data_car_array["ราคา"] = price_car
 
@@ -182,7 +182,7 @@ def funcDetail():
                         #print(data_car_array)
 
                 # save to json
-                print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
+                # print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
                 with open("detail/" + car_id + ".json", "w") as f:
                     json.dump(data_car_array, f, ensure_ascii=False)
 
@@ -196,14 +196,14 @@ def funcDetail():
 
                 with open("detail/" + car_id + ".json") as f:
                     data = json.load(f)
-                print(data)
-                print(data['ราคา'])
+                # print(data)
+                # print(data['ประเภทเชื้อเพลิง'])
 
                 mycursor = mydb.cursor()
 
-                sql1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel)" \
+                sql_1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel)" \
                        " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                val1 = [
+                val_1 = [
                     (time,
                      data['ราคา'],
                      data['ประเภท'],
@@ -223,7 +223,7 @@ def funcDetail():
                      data['ลิงก์'],
                      data['ประเภทเชื้อเพลิง'])
                 ]
-                mycursor.executemany(sql1, val1)
+                mycursor.executemany(sql_1, val_1)
 
                 sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
                 val2 = (time, "Yes", car_id)
@@ -248,7 +248,7 @@ def funcDetail():
                 query = mycursor.execute("SELECT link FROM links ")
                 myresult = mycursor.fetchall()
                 for link in myresult:
-                    print("link >>> ", link)
+                    # print("link >>> ", link)
                     url = str(link)
                     u = url.split("'")
                     url_detail = u[1]
@@ -257,9 +257,9 @@ def funcDetail():
                     # print("split_url -1 = ",split_url[-1])
                     c = split_url[-1].split("'")
                     car_id = c[0]
-                    print("car_id  = ", car_id)
+                    # print("car_id  = ", car_id)
                     location = split_url[-2]
-                    print("location = ", location)
+                    # print("location = ", location)
 
                     # ADD TO ARRAY
                     data_car_array["ลิงก์"] = url_detail
@@ -285,12 +285,12 @@ def funcDetail():
 
                     if soup2.find("div", {"class": "listing__price"}) == None:
                         print("ERROR")
-                        print(web_data.text)
+                        # print(web_data.text)
 
                     price_car = soup2.find("div", {"class": "listing__price"}).text
                     if price_car == None:
                         continue
-                    print("price_car >> ", price_car)
+                    # print("price_car >> ", price_car)
                     # ADD TO ARRAY
                     data_car_array["ราคา"] = price_car
 
@@ -298,7 +298,7 @@ def funcDetail():
                     # print(type_car)
                     split_type_car = type_car.split(" ")
                     # print(split_type_car)
-                    print(split_type_car[-1])
+                    # print(split_type_car[-1])
                     # ADD TO ARRAY
                     data_car_array["ประเภท"] = split_type_car[-1]
 
@@ -331,10 +331,10 @@ def funcDetail():
                                 break
                             # ADD TO ARRAY
                             data_car_array[key] = value
-                            print(data_car_array)
+                            # print(data_car_array)
 
                     # save to json
-                    print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
+                    # print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
                     with open("detail/" + car_id + ".json", "w") as f:
                         json.dump(data_car_array, f, ensure_ascii=False)
 
@@ -348,8 +348,8 @@ def funcDetail():
 
                     with open("../scraping detail/detail/" + car_id + ".json") as f:
                         data = json.load(f)
-                    print(data)
-                    print(data['ราคา'])
+                    # print(data)
+                    # print(data['ราคา'])
 
                     mycursor = mydb.cursor()
                     sql = "UPDATE details SET price = %s, type = %s, brand = %s, model = %s, face = %s," \
