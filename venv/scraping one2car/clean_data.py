@@ -21,7 +21,7 @@ def funcClean():
 
     mycursor_1 = mydb.cursor()
     query_1 = mycursor_1.execute("SELECT created_at, updated_at, price, type, brand, model, submodel, year, motor, "
-                                 "gear, seats, distance, color, image, location, link, clean_at, fuel, car_id FROM details ")
+                                 "gear, seats, distance, color, image, location, link, clean_at, fuel, car_id FROM details WHERE active = 'Yes'")
     myresult_1 = mycursor_1.fetchall()
 
     for data in myresult_1:
@@ -147,8 +147,8 @@ def funcClean():
             mycursor = mydb.cursor()
 
             sql1 = "INSERT INTO data_cars (created_at, price, type, brand, model, submodel, year, motor, gear, " \
-                   "seats, distance, color, image, location, link, car_id_detail, fuel)" \
-                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                   "seats, distance, color, image, location, link, car_id_detail, fuel, active)" \
+                   " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             val1 = [
                 (time,
                  price,
@@ -166,7 +166,8 @@ def funcClean():
                  location,
                  link,
                  car_id_detail,
-                 fuel)
+                 fuel,
+                 "Yes")
             ]
             mycursor.executemany(sql1, val1)
             sql2 = "UPDATE details SET clean_at = %s WHERE car_id = %s"

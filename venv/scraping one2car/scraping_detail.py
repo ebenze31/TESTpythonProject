@@ -20,7 +20,7 @@ def funcDetail():
     print("Connect")
 
     mycursor = mydb.cursor()
-    query = mycursor.execute("SELECT link FROM links ")
+    query = mycursor.execute("SELECT link FROM links WHERE active = 'Yes' ")
     myresult = mycursor.fetchall()
     for link in myresult:
         # print("link >>> ",link)
@@ -59,7 +59,7 @@ def funcDetail():
 
         # เช็ค read_at in links database
         mycursor = mydb.cursor()
-        query = mycursor.execute("SELECT read_at FROM links WHERE car_id = " + car_id)
+        query = mycursor.execute("SELECT read_at FROM links WHERE active = 'Yes' AND car_id = " + car_id)
         myresult = mycursor.fetchall()
         for read_at in myresult:
             #print("read_at >>> ",read_at)
@@ -118,19 +118,43 @@ def funcDetail():
                 web_data = requests.get(url_detail)
                 soup2 = BeautifulSoup(web_data.text,'html.parser')
 
-                # หา 404 เปลี่ยน active เป็น No
-
-                error_404 = soup2.find("title").text
+                # หา รถที่ขายแล้ว เปลี่ยน active เป็น No
+                error = soup2.find("div",{"class":"headline"})
+                try:
+                    error_404 = error.text
+                except:
+                    error_404 = "รถยังอยู่จ้าา"
                 print("title >>",error_404)
-                if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
+                if error_404 == "รถคันนี้ได้ขายไปแล้ว":
                     mycursor = mydb.cursor()
                     sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s"
                     val = ("No", time, car_id)
                     mycursor.execute(sql, val)
+
+                    sql_1 = "UPDATE details SET active = %s , updated_at = %s WHERE car_id = %s"
+                    val_1 = ("No", time, car_id)
+                    mycursor.execute(sql_1, val_1)
+
+                    sql_2 = "UPDATE data_cars SET active = %s , updated_at = %s WHERE car_id_detail = %s"
+                    val_2 = ("No", time, car_id)
+                    mycursor.execute(sql_2, val_2)
+
                     mydb.commit()
                     break
                 elif error_404 == None:
                     continue
+
+                # error_404 = soup2.find("title").text
+                # print("title >>",error_404)
+                # if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
+                #     mycursor = mydb.cursor()
+                #     sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s"
+                #     val = ("No", time, car_id)
+                #     mycursor.execute(sql, val)
+                #     mydb.commit()
+                #     break
+                # elif error_404 == None:
+                #     continue
 
                 if soup2.find("div",{"class":"listing__price"}) == None :
                     print("ERROR")
@@ -201,8 +225,8 @@ def funcDetail():
 
                 mycursor = mydb.cursor()
 
-                sql_1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel)" \
-                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                sql_1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel, active)" \
+                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
                 val_1 = [
                     (time,
                      data['ราคา'],
@@ -221,7 +245,8 @@ def funcDetail():
                      car_id,
                      data['สถานที่'],
                      data['ลิงก์'],
-                     data['ประเภทเชื้อเพลิง'])
+                     data['ประเภทเชื้อเพลิง'],
+                     "Yes")
                 ]
                 mycursor.executemany(sql_1, val_1)
 
@@ -238,14 +263,14 @@ def funcDetail():
                 val2 = (time, "Yes", car_id)
                 mycursor.execute(sql2, val2)
 
-                sql = "UPDATE details SET updated_at = %s WHERE car_id = %s"
-                val = (time, car_id)
+                sql = "UPDATE details SET updated_at = %s WHERE active = %s AND car_id = %s"
+                val = (time, "Yes", car_id)
                 mycursor.execute(sql, val)
 
                 mydb.commit()
 
                 mycursor = mydb.cursor()
-                query = mycursor.execute("SELECT link FROM links ")
+                query = mycursor.execute("SELECT link FROM links WHERE active = 'Yes' ")
                 myresult = mycursor.fetchall()
                 for link in myresult:
                     # print("link >>> ", link)
@@ -269,19 +294,43 @@ def funcDetail():
                     web_data = requests.get(url_detail)
                     soup2 = BeautifulSoup(web_data.text, 'html.parser')
 
-                    # หา 404 เปลี่ยน active เป็น No
-
-                    error_404 = soup2.find("title").text
+                    # หา รถที่ขายแล้ว เปลี่ยน active เป็น No
+                    error = soup2.find("div", {"class": "headline"})
+                    try:
+                        error_404 = error.text
+                    except:
+                        error_404 = "รถยังอยู่จ้าา"
                     print("title >>", error_404)
-                    if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
+                    if error_404 == "รถคันนี้ได้ขายไปแล้ว":
                         mycursor = mydb.cursor()
-                        sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s AND active = %s"
-                        val = ("No", time, car_id, "Yes")
+                        sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s"
+                        val = ("No", time, car_id)
                         mycursor.execute(sql, val)
+
+                        sql_1 = "UPDATE details SET active = %s , updated_at = %s WHERE car_id = %s"
+                        val_1 = ("No", time, car_id)
+                        mycursor.execute(sql_1, val_1)
+
+                        sql_2 = "UPDATE data_cars SET active = %s , updated_at = %s WHERE car_id_detail = %s"
+                        val_2 = ("No", time, car_id)
+                        mycursor.execute(sql_2, val_2)
+
                         mydb.commit()
                         break
                     elif error_404 == None:
                         continue
+
+                    # error_404 = soup2.find("title").text
+                    # print("title >>",error_404)
+                    # if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
+                    #     mycursor = mydb.cursor()
+                    #     sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s"
+                    #     val = ("No", time, car_id)
+                    #     mycursor.execute(sql, val)
+                    #     mydb.commit()
+                    #     break
+                    # elif error_404 == None:
+                    #     continue
 
                     if soup2.find("div", {"class": "listing__price"}) == None:
                         print("ERROR")
