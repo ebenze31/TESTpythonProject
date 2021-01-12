@@ -298,7 +298,7 @@ def funcClean():
 
                 sql = "UPDATE data_cars SET updated_at = %s, price= %s, type= %s, brand= %s, model= %s, submodel= %s," \
                         " year= %s, motor= %s,gear= %s, seats= %s, distance= %s, color= %s, image= %s, location= %s," \
-                        " link= %s, car_id_detail= %s, fuel= %s WHERE car_id_detail = %s"
+                        " link= %s, car_id_detail= %s, fuel= %s, active= 'Yes' WHERE car_id_detail = %s"
                 val = (time, price, type, brand, model, submodel, year, motor, gear, seats, distance, color, image,
                          location, link, car_id_detail,fuel, car_id_detail)
 
