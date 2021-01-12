@@ -120,7 +120,7 @@ def funcUrl_allpage():
 
     # json loop
     count = 0
-    while count < 1 : # int(last_page_num)
+    while count < int(last_page_num) : # int(last_page_num)
         url_next_page = 'https://www.one2car.com/'+ text_next_page
         home_next_page = requests.get(url_next_page)
         soup2 = BeautifulSoup(home_next_page.text, 'html.parser')
