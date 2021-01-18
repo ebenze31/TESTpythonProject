@@ -1,2 +1,4 @@
 /venv/scraping one2car/connect.py
-/venv/scraping one2car/scraping one2car
+/venv/scraping one2car/clean_data.py
+/venv/scraping one2car/scraping_detail.py
+/venv/scraping one2car/scraping_link.py
