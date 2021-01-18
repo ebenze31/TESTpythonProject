@@ -338,12 +338,15 @@ def funcDetail():
                         print("ERROR")
                         # print(web_data.text)
 
-                    price_car = soup2.find("div", {"class": "listing__price"}).text
-                    if price_car == None:
-                        continue
-                    # print("price_car >> ", price_car)
-                    # ADD TO ARRAY
-                    data_car_array["ราคา"] = price_car
+                    try:
+                        price_car = soup2.find("div", {"class": "listing__price"}).text
+                        if price_car == None:
+                            continue
+                        # print("price_car >> ",price_car)
+                        # ADD TO ARRAY
+                        data_car_array["ราคา"] = price_car
+                    except:
+                        data_car_array["ราคา"] = "ติดต่อผู้ขาย"
 
                     type_car = soup2.find("div", {"class": "listing__title"}).text
                     # print(type_car)
