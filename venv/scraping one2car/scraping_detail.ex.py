@@ -169,13 +169,17 @@ def funcDetail():
                 except:
                     data_car_array["ราคา"] = "ติดต่อผู้ขาย"
 
-                type_car = soup2.find("div",{"class":"listing__title"}).text
-                #print(type_car)
-                split_type_car = type_car.split(" ")
-                #print(split_type_car)
-                #print(split_type_car[-1])
-                # ADD TO ARRAY
-                data_car_array["ประเภท"] = split_type_car[-1]
+                try:
+                    type_car = soup2.find("div",{"class":"listing__title"}).text
+                    #print(type_car)
+                    split_type_car = type_car.split(" ")
+                    #print(split_type_car)
+                    #print(split_type_car[-1])
+                    # ADD TO ARRAY
+                    data_car_array["ประเภท"] = split_type_car[-1]
+                except:
+                    data_car_array["ประเภท"] = ""
+
                 try:
                     img = soup2.find("div", {"class": "gallery__image"})
                     img_car = img.find('img')['data-src']
@@ -348,13 +352,16 @@ def funcDetail():
                     except:
                         data_car_array["ราคา"] = "ติดต่อผู้ขาย"
 
-                    type_car = soup2.find("div", {"class": "listing__title"}).text
-                    # print(type_car)
-                    split_type_car = type_car.split(" ")
-                    # print(split_type_car)
-                    # print(split_type_car[-1])
-                    # ADD TO ARRAY
-                    data_car_array["ประเภท"] = split_type_car[-1]
+                    try:
+                        type_car = soup2.find("div", {"class": "listing__title"}).text
+                        # print(type_car)
+                        split_type_car = type_car.split(" ")
+                        # print(split_type_car)
+                        # print(split_type_car[-1])
+                        # ADD TO ARRAY
+                        data_car_array["ประเภท"] = split_type_car[-1]
+                    except:
+                        data_car_array["ประเภท"] = ""
 
                     try:
                         img = soup2.find("div", {"class": "gallery__image"})
