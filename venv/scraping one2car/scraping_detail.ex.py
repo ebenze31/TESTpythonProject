@@ -407,8 +407,11 @@ def funcDetail():
                     #     print(split[0])
                     #     car_id = split[0]
 
-                    with open("../scraping detail/detail/" + car_id + ".json") as f:
-                        data = json.load(f)
+                    try:
+                        with open("../scraping detail/detail/" + car_id + ".json") as f:
+                            data = json.load(f)
+                    except:
+                        continue
                     # print(data)
                     # print(data['ราคา'])
 
