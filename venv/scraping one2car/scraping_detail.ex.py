@@ -140,9 +140,7 @@ def funcDetail():
                     mycursor.execute(sql_2, val_2)
 
                     mydb.commit()
-                    break
                 elif error_404 == None:
-                    continue
 
                 # error_404 = soup2.find("title").text
                 # print("title >>",error_404)
