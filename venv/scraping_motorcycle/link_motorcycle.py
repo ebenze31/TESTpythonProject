@@ -34,11 +34,29 @@ for item in links:
         sp = value2.split("-")
         sp2 = sp[-1].split(".")
         motorcycles_id = sp2[0]
+
         link_array[motorcycles_id] = value2
 
-    print("motorcycles_id = " + motorcycles_id)
-    print("links = "+ value2)
-    print(link_array)
+    # print("motorcycles_id = " + motorcycles_id)
+    # print("links = "+ value2)
+    # print(link_array)
 
-    with open("link_url/url/" + motorcycles_id + ".json", "w") as f:
+# find page all
+ac = soup.find("div",{"class":"w3-center"})
+ac2 = ac.find("div",{"class":"w3-bar"})
+
+# active_page
+ac3 = ac2.find("a",{"class":"w3-orange"})
+active_page = ac3.text
+print("active_page = ", active_page)
+
+# last page
+ac4 = ac2.find("a",{"title":"หน้าสุดท้าย"})
+ac5 = ac4['href']
+sp = ac5.split("า")
+last_page = sp[-1]
+print("last_page = ", last_page)
+
+
+with open("link_url/url/" + active_page + ".json", "w") as f:
         json.dump(link_array, f, ensure_ascii=False)
