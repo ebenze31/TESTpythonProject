@@ -140,128 +140,128 @@ def funcDetail():
                     mycursor.execute(sql_2, val_2)
 
                     mydb.commit()
-                elif error_404 == None:
+                elif error_404 == "รถยังอยู่จ้าา":
 
-                # error_404 = soup2.find("title").text
-                # print("title >>",error_404)
-                # if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
-                #     mycursor = mydb.cursor()
-                #     sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s"
-                #     val = ("No", time, car_id)
-                #     mycursor.execute(sql, val)
-                #     mydb.commit()
-                #     break
-                # elif error_404 == None:
-                #     continue
+                    # error_404 = soup2.find("title").text
+                    # print("title >>",error_404)
+                    # if error_404 == "ไม่ค้นพบหน้าที่คุณต้องการ - One2car.com":
+                    #     mycursor = mydb.cursor()
+                    #     sql = "UPDATE links SET active = %s , read_at = %s WHERE car_id = %s"
+                    #     val = ("No", time, car_id)
+                    #     mycursor.execute(sql, val)
+                    #     mydb.commit()
+                    #     break
+                    # elif error_404 == None:
+                    #     continue
 
-                if soup2.find("div",{"class":"listing__price"}) == None :
-                    print("ERROR")
-                    # print(web_data.text)
-                try:
-                    price_car = soup2.find("div",{"class":"listing__price"}).text
-                    if price_car == None:
-                        continue
-                    # print("price_car >> ",price_car)
-                    # ADD TO ARRAY
-                    data_car_array["ราคา"] = price_car
-                except:
-                    data_car_array["ราคา"] = "ติดต่อผู้ขาย"
-
-                try:
-                    type_car = soup2.find("div",{"class":"listing__title"}).text
-                    #print(type_car)
-                    split_type_car = type_car.split(" ")
-                    #print(split_type_car)
-                    #print(split_type_car[-1])
-                    # ADD TO ARRAY
-                    data_car_array["ประเภท"] = split_type_car[-1]
-                except:
-                    data_car_array["ประเภท"] = ""
-
-                try:
-                    img = soup2.find("div", {"class": "gallery__image"})
-                    img_car = img.find('img')['data-src']
-                    #print("IMG >>> "+img_car)
-                    # ADD TO ARRAY
-                    data_car_array["รูป"] = img_car
-                except:
-                    data_car_array["รูป"] = ""
-
-                car = soup2.find_all("div",{"class":"list-item"})
-                for item in car :
-                    if item.find('span') == None :
-                        continue
-                    if len(item.find_all('span')) == 2 or 3:
-                        #print(item.find_all('span')[0].text, " / ", item.find_all('span')[1].text)
-                        if item.find_all('span')[0].text == "ประเภทรถ" :
+                    if soup2.find("div",{"class":"listing__price"}) == None :
+                        print("ERROR")
+                        # print(web_data.text)
+                    try:
+                        price_car = soup2.find("div",{"class":"listing__price"}).text
+                        if price_car == None:
                             continue
-                        if item.find_all('span')[0].text == "เล่มทะเบียน" :
+                        # print("price_car >> ",price_car)
+                        # ADD TO ARRAY
+                        data_car_array["ราคา"] = price_car
+                    except:
+                        data_car_array["ราคา"] = "ติดต่อผู้ขาย"
+
+                    try:
+                        type_car = soup2.find("div",{"class":"listing__title"}).text
+                        #print(type_car)
+                        split_type_car = type_car.split(" ")
+                        #print(split_type_car)
+                        #print(split_type_car[-1])
+                        # ADD TO ARRAY
+                        data_car_array["ประเภท"] = split_type_car[-1]
+                    except:
+                        data_car_array["ประเภท"] = ""
+
+                    try:
+                        img = soup2.find("div", {"class": "gallery__image"})
+                        img_car = img.find('img')['data-src']
+                        #print("IMG >>> "+img_car)
+                        # ADD TO ARRAY
+                        data_car_array["รูป"] = img_car
+                    except:
+                        data_car_array["รูป"] = ""
+
+                    car = soup2.find_all("div",{"class":"list-item"})
+                    for item in car :
+                        if item.find('span') == None :
                             continue
+                        if len(item.find_all('span')) == 2 or 3:
+                            #print(item.find_all('span')[0].text, " / ", item.find_all('span')[1].text)
+                            if item.find_all('span')[0].text == "ประเภทรถ" :
+                                continue
+                            if item.find_all('span')[0].text == "เล่มทะเบียน" :
+                                continue
 
-                        key = item.find_all('span')[0].text
-                        value = item.find_all('span')[1].text
-
-                        if item.find_all('span')[0].text == "รัศมีการเลี้ยว" :
                             key = item.find_all('span')[0].text
                             value = item.find_all('span')[1].text
-                            break
-                        # ADD TO ARRAY
-                        data_car_array[key] = value
-                        #print(data_car_array)
 
-                # save to json
-                # print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
-                with open("detail/" + car_id + ".json", "w") as f:
-                    json.dump(data_car_array, f, ensure_ascii=False)
+                            if item.find_all('span')[0].text == "รัศมีการเลี้ยว" :
+                                key = item.find_all('span')[0].text
+                                value = item.find_all('span')[1].text
+                                break
+                            # ADD TO ARRAY
+                            data_car_array[key] = value
+                            #print(data_car_array)
 
-                # filenames = os.listdir('../scraping detail/detail')
-                # # print(filenames)
-                # for file in filenames:
-                #     # print(file)
-                #     split = file.split(".")
-                #     print(split[0])
-                #     car_id = split[0]
+                    # save to json
+                    # print("car", json.dumps(data_car_array, ensure_ascii=False), "\n")
+                    with open("detail/" + car_id + ".json", "w") as f:
+                        json.dump(data_car_array, f, ensure_ascii=False)
 
-                with open("detail/" + car_id + ".json") as f:
-                    data = json.load(f)
-                # print(data)
-                # print(data['ประเภทเชื้อเพลิง'])
+                    # filenames = os.listdir('../scraping detail/detail')
+                    # # print(filenames)
+                    # for file in filenames:
+                    #     # print(file)
+                    #     split = file.split(".")
+                    #     print(split[0])
+                    #     car_id = split[0]
 
-                mycursor = mydb.cursor()
+                    with open("detail/" + car_id + ".json") as f:
+                        data = json.load(f)
+                    # print(data)
+                    # print(data['ประเภทเชื้อเพลิง'])
 
-                sql_1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel, active)" \
-                       " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
-                val_1 = [
-                    (time,
-                     data['ราคา'],
-                     data['ประเภท'],
-                     data['ยี่ห้อ'],
-                     data['รุ่น'],
-                     data['โฉมรถยนต์'],
-                     data['รายละเอียดรุ่น'],
-                     data['ปี'],
-                     data['ขนาดเครื่องยนต์'],
-                     data['ระบบเกียร์'],
-                     data['จำนวนที่นั่ง'],
-                     data['เลขไมล์ (กม.)'],
-                     data['สี'],
-                     data['รูป'],
-                     car_id,
-                     data['สถานที่'],
-                     data['ลิงก์'],
-                     data['ประเภทเชื้อเพลิง'],
-                     "Yes")
-                ]
-                mycursor.executemany(sql_1, val_1)
+                    mycursor = mydb.cursor()
 
-                sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
-                val2 = (time, "Yes", car_id)
-                mycursor.execute(sql2, val2)
+                    sql_1 = "INSERT INTO details (created_at, price, type, brand, model, face, submodel, year, motor, gear, seats, distance, color, image, car_id, location, link, fuel, active)" \
+                           " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                    val_1 = [
+                        (time,
+                         data['ราคา'],
+                         data['ประเภท'],
+                         data['ยี่ห้อ'],
+                         data['รุ่น'],
+                         data['โฉมรถยนต์'],
+                         data['รายละเอียดรุ่น'],
+                         data['ปี'],
+                         data['ขนาดเครื่องยนต์'],
+                         data['ระบบเกียร์'],
+                         data['จำนวนที่นั่ง'],
+                         data['เลขไมล์ (กม.)'],
+                         data['สี'],
+                         data['รูป'],
+                         car_id,
+                         data['สถานที่'],
+                         data['ลิงก์'],
+                         data['ประเภทเชื้อเพลิง'],
+                         "Yes")
+                    ]
+                    mycursor.executemany(sql_1, val_1)
 
-                mydb.commit()
+                    sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
+                    val2 = (time, "Yes", car_id)
+                    mycursor.execute(sql2, val2)
 
-            elif int(t.days) > 7:
-                print("--------- ค่ามากกว่า 7 ----------")
+                    mydb.commit()
+
+            elif int(t.days) > 5:
+                print("--------- ค่ามากกว่า 5 ----------")
                 mycursor = mydb.cursor()
                 sql2 = "UPDATE links SET read_at = %s WHERE active = %s AND car_id = %s"
                 val2 = (time, "Yes", car_id)
