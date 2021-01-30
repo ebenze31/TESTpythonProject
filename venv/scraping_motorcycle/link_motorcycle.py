@@ -7,13 +7,13 @@ import mysql.connector
 import datetime as dt
 
 # def funcUrl_allpage():
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="car"
-)
-print("Connect")
+# mydb = mysql.connector.connect(
+#     host="localhost",
+#     user="root",
+#     password="",
+#     database="car"
+# )
+# print("Connect")
 
 
 time = dt.datetime.now()
@@ -26,7 +26,19 @@ soup = BeautifulSoup(home.text, 'html.parser')
 # เก็บ url ใน 1 pagr
 links = soup.find_all("ul",{"class":"catalog_table"})
 link_array = {}
-value = {}
 for item in links:
-    value = item.find_all("a",{"class":"thumb"})['href']
-    print(value)
+    value = item.find_all("div",{"class":"title_box"})
+    for i in value:
+        value2 = i.find('a')['href']
+
+        sp = value2.split("-")
+        sp2 = sp[-1].split(".")
+        motorcycles_id = sp2[0]
+        link_array[motorcycles_id] = value2
+
+    print("motorcycles_id = " + motorcycles_id)
+    print("links = "+ value2)
+    print(link_array)
+
+    with open("link_url/url/" + motorcycles_id + ".json", "w") as f:
+        json.dump(link_array, f, ensure_ascii=False)
