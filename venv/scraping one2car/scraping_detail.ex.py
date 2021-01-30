@@ -336,6 +336,7 @@ def funcDetail():
                         # elif error_404 == None:
                         #     continue
 
+
                         if soup2.find("div", {"class": "listing__price"}) == None:
                             print("ERROR")
                             # print(web_data.text)
