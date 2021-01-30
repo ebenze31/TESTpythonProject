@@ -89,7 +89,7 @@ for item in links:
             mydb.commit()
 # loop
 count = 0
-while count < 5 : # int(last_page)
+while count < 1 : # int(last_page)
     url_next_page = 'https://xn--42cgk3b7cdl3dvabeb1k5etc5gd.tv/' + text_next_page
     home_next_page = requests.get(url_next_page)
     soup2 = BeautifulSoup(home_next_page.text, 'html.parser')
