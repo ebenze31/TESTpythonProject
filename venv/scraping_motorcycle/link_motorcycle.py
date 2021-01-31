@@ -88,7 +88,7 @@ def funcUrl_allpage():
                 mycursor.execute(sql, val)
                 mydb.commit()
     # loop
-    count = 0
+    count = 1
     while count < int(last_page) : # int(last_page)
         url_next_page = 'https://xn--42cgk3b7cdl3dvabeb1k5etc5gd.tv/' + text_next_page
         home_next_page = requests.get(url_next_page)
@@ -158,4 +158,5 @@ def funcUrl_allpage():
                     val = (time, motorcycles_id)
                     mycursor.execute(sql, val)
                     mydb.commit()
+
         count = count + 1
