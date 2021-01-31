@@ -414,3 +414,4 @@ def funcDetail():
         print("เสร็จเรียบร้อย")
 
 
+
