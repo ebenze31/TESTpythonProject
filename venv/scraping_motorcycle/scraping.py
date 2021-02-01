@@ -6,3 +6,4 @@ import clean_motorcycles
 link_motorcycle.funcUrl_allpage()
 detail_motorcycles.funcDetail()
 clean_motorcycles.funcClean()
+

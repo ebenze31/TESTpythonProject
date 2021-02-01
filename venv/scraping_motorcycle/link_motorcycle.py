@@ -160,3 +160,4 @@ def funcUrl_allpage():
                     mydb.commit()
 
         count = count + 1
+
