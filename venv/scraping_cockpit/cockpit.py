@@ -61,6 +61,7 @@ for i in div:
     ]
     mycursor.executemany(sql_div_up, val)
     mydb.commit()
+    
 
 
 
