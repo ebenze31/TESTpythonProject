@@ -63,5 +63,3 @@ for i in div:
     mydb.commit()
     
 
-
-

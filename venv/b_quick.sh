@@ -1,6 +1,6 @@
 #!/bin/bash
 cd /var/www/viicheck.com/TESTpythonProject/venv/
 source Scripts/activate
-cd scraping\ one2car/
-python3 scraping.py
+cd scraping_b_quick/
+python3 b_quick.py
 deactivate

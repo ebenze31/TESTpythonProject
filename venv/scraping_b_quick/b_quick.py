@@ -97,6 +97,3 @@ for i in div_img_down:
     mycursor.executemany(sql_div_up, val)
     mydb.commit()
 
-
-
-
