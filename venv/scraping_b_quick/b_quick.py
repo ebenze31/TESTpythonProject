@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import os
 import mysql.connector
 import datetime as dt
+import pyshorteners as ps
 
 mydb = mysql.connector.connect(
     host="localhost",
@@ -30,8 +31,10 @@ soup = BeautifulSoup(home.text, 'html.parser')
 div_img_up = soup.find_all("div",{"class":"col-lg-6 pt-3"})
 
 for i in div_img_up:
-    link = i.find('a')['href']
-    img_up = i.find('img')['src']
+    link_link = i.find('a')['href']
+    link = ps.Shortener().tinyurl.short(link_link)
+    link_img_up = i.find('img')['src']
+    img_up = ps.Shortener().tinyurl.short(link_img_up)
     title = i.find("div", {"class": "txt-title"}).text
     detail = i.find("p", {"class": "cut-text"}).text
     time_period = i.find("span", {"style": "font-size: 20px; font-weight: bold; line-height: 18px;"}).text
@@ -63,8 +66,10 @@ for i in div_img_up:
 div_img_down = soup.find_all("div",{"class":"col-lg-3 col-md-4 col-6"})
 
 for i in div_img_down:
-    link = i.find('a')['href']
-    img_up = i.find('img')['src']
+    link_link = i.find('a')['href']
+    link = ps.Shortener().tinyurl.short(link_link)
+    link_img_up = i.find('img')['src']
+    img_up = ps.Shortener().tinyurl.short(link_img_up)
     title = i.find("div", {"class": "txt-title"}).text
     detail = i.find("p", {"class": "cut-text"}).text
     time_period = i.find("span", {"class": "txt-time-p-d"}).text
