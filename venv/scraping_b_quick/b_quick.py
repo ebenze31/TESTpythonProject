@@ -69,12 +69,12 @@ for i in div_img_down:
     detail = i.find("p", {"class": "cut-text"}).text
     time_period = i.find("span", {"class": "txt-time-p-d"}).text
 
-    print("link >> " + link)
-    print("img_up >> " + img_up)
-    print("title >> " + title)
-    print("detail >> " + detail)
-    print("ระยะเวลา >> " + time_period)
-    print("-----------------------------------------------------------------------")
+#    print("link >> " + link)
+#    print("img_up >> " + img_up)
+#    print("title >> " + title)
+#    print("detail >> " + detail)
+#    print("ระยะเวลา >> " + time_period)
+#    print("-----------------------------------------------------------------------")
 
     mycursor = mydb.cursor()
 
