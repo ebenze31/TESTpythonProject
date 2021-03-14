@@ -8,10 +8,10 @@ import datetime as dt
 import pyshorteners as ps
 
 mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="car"
+    host="159.65.128.190",
+    user="viicheck2",
+    password="viicheck",
+    database="viicheck"
 )
 print("Connect")
 
